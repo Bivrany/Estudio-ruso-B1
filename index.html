@@ -1,0 +1,869 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#176640">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#284d55">
+  <title>Ruso B1 · Gramática</title>
+  <style>
+    :root {
+      --ink: #172528;
+      --muted: #66777a;
+      --paper: #f8f6f0;
+      --card: #ffffff;
+      --teal: #284d55;
+      --teal-light: #e4f0ee;
+      --line: #dbe1dc;
+      --good: #176640;
+      --good-bg: #e5f5ea;
+      --bad: #a23535;
+      --bad-bg: #ffeded;
+      --gold: #bb7a1f;
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      min-height: 100vh;
+      color: var(--ink);
+      background:
+        radial-gradient(circle at 90% -5%, #d9e9e5 0, transparent 27rem),
+        linear-gradient(135deg, #f7f3ea 0%, #edf3ef 100%);
+    }
+    button { font: inherit; }
+    .shell { width: min(920px, calc(100% - 32px)); margin: 0 auto; padding: 34px 0 46px; }
+    header { display: flex; align-items: center; justify-content: space-between; gap: 18px; margin-bottom: 28px; }
+    .brand { display: flex; align-items: center; gap: 13px; }
+    .mark {
+      width: 43px; height: 43px; display: grid; place-items: center; border-radius: 13px;
+      background: var(--teal); color: white; font-weight: 800; font-size: 18px; box-shadow: 0 7px 18px #284d5530;
+    }
+    .brand h1 { margin: 0; font-size: clamp(20px, 3.5vw, 25px); letter-spacing: -.03em; }
+    .brand p { margin: 2px 0 0; color: var(--muted); font-size: 13px; }
+    .saved {
+      border: 1px solid #bfd5cc; color: var(--good); background: #f4fbf6; padding: 8px 11px; border-radius: 999px;
+      font-size: 12px; font-weight: 700; white-space: nowrap;
+    }
+    .card { background: var(--card); border: 1px solid #e6e8e2; border-radius: 22px; box-shadow: 0 12px 32px #243a3520; overflow: hidden; }
+    .intro { padding: clamp(27px, 5vw, 48px); }
+    .eyebrow { color: var(--gold); font-size: 12px; font-weight: 800; letter-spacing: .11em; text-transform: uppercase; }
+    h2 { margin: 10px 0 9px; font-size: clamp(27px, 5vw, 38px); line-height: 1.05; letter-spacing: -.045em; }
+    .lead { max-width: 620px; margin: 0; line-height: 1.55; color: var(--muted); }
+    .session-options { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin: 30px 0 16px; }
+    .session-option { position: relative; }
+    .session-option input { position: absolute; opacity: 0; }
+    .session-option label {
+      display: grid; place-items: center; padding: 13px 6px; min-height: 58px; cursor: pointer; border: 1px solid var(--line);
+      border-radius: 12px; color: var(--teal); font-weight: 800; transition: .15s ease;
+    }
+    .session-option input:checked + label { background: var(--teal); color: white; border-color: var(--teal); box-shadow: 0 5px 13px #284d5533; }
+    .option-caption { display: block; font-size: 11px; font-weight: 600; margin-top: 2px; opacity: .8; }
+    .action-row { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 21px; }
+    .primary, .secondary, .text-button {
+      cursor: pointer; border: 0; border-radius: 11px; transition: transform .12s ease, background .12s ease;
+    }
+    .primary { background: var(--teal); color: white; padding: 13px 18px; font-weight: 800; box-shadow: 0 6px 13px #284d5530; }
+    .primary:hover, .secondary:hover { transform: translateY(-1px); }
+    .secondary { background: var(--teal-light); color: var(--teal); padding: 13px 16px; font-weight: 800; }
+    .text-button { background: transparent; color: var(--teal); padding: 9px 5px; font-weight: 750; text-decoration: underline; text-underline-offset: 3px; }
+    .info-grid { display: grid; grid-template-columns: repeat(3, 1fr); border-top: 1px solid var(--line); }
+    .info-grid div { padding: 18px clamp(13px, 3vw, 26px); }
+    .info-grid div + div { border-left: 1px solid var(--line); }
+    .info-grid strong { display: block; font-size: 22px; }
+    .info-grid span { color: var(--muted); font-size: 12px; }
+    .hidden { display: none !important; }
+    .quiz-head { padding: 22px clamp(22px, 5vw, 45px) 15px; border-bottom: 1px solid var(--line); }
+    .quiz-meta { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; font-size: 13px; color: var(--muted); font-weight: 700; }
+    .quiz-meta strong { color: var(--teal); font-size: 14px; }
+    .progress { height: 7px; overflow: hidden; margin-top: 11px; background: #e7ece8; border-radius: 999px; }
+    .progress > div { height: 100%; width: 0; background: linear-gradient(90deg, #386873, #77a99b); border-radius: inherit; transition: width .3s ease; }
+    .question-area { padding: clamp(24px, 5vw, 45px); }
+    .question-number { color: var(--gold); font-size: 12px; letter-spacing: .09em; font-weight: 850; text-transform: uppercase; }
+    .question { margin: 10px 0 26px; font-family: Georgia, "Times New Roman", serif; font-size: clamp(23px, 4.4vw, 32px); line-height: 1.25; letter-spacing: -.015em; white-space: pre-line; }
+    .answers { display: grid; gap: 10px; }
+    .answer {
+      display: flex; align-items: center; text-align: left; gap: 15px; width: 100%; min-height: 61px; padding: 12px 16px;
+      background: white; border: 1px solid var(--line); color: var(--ink); border-radius: 13px; cursor: pointer; transition: border .15s ease, background .15s ease, transform .15s ease;
+    }
+    .answer:not(:disabled):hover { border-color: #789c96; background: #f5faf7; transform: translateX(2px); }
+    .answer:disabled { cursor: default; }
+    .answer-label { flex: 0 0 auto; display: grid; place-items: center; height: 31px; width: 31px; border-radius: 9px; color: var(--teal); background: var(--teal-light); font-size: 13px; font-weight: 850; }
+    .answer-text { font-size: 17px; line-height: 1.35; }
+    .answer.correct { background: var(--good-bg); border-color: #81c99b; color: var(--good); }
+    .answer.correct .answer-label { background: var(--good); color: white; }
+    .answer.wrong { background: var(--bad-bg); border-color: #e3aaaa; color: var(--bad); }
+    .answer.wrong .answer-label { background: var(--bad); color: white; }
+    .feedback { margin-top: 20px; padding: 14px 16px; border-radius: 12px; line-height: 1.45; font-weight: 650; }
+    .feedback.good { color: var(--good); background: var(--good-bg); }
+    .feedback.bad { color: var(--bad); background: var(--bad-bg); }
+    .question-tools { display: flex; flex-wrap: wrap; gap: 9px; margin-top: 18px; }
+    .tool-button {
+      padding: 9px 11px; border: 1px solid var(--line); border-radius: 10px; background: #fff; color: var(--teal);
+      cursor: pointer; font-size: 13px; font-weight: 750;
+    }
+    .tool-button:hover { background: var(--teal-light); border-color: #afc8c0; }
+    .tool-button.saved-question { color: #8b5716; background: #fff6e7; border-color: #ecc783; }
+    .note-panel { margin-top: 12px; }
+    .note-panel label { display: block; margin-bottom: 6px; color: var(--muted); font-size: 12px; font-weight: 750; }
+    .note-panel textarea {
+      display: block; width: 100%; min-height: 87px; resize: vertical; padding: 11px 12px; border: 1px solid var(--line);
+      border-radius: 11px; color: var(--ink); background: #fffdf8; font: inherit; line-height: 1.4;
+    }
+    .note-panel textarea:focus { outline: 2px solid #b8d4cc; outline-offset: 1px; border-color: #7aa499; }
+    .note-help { margin: 6px 0 0; color: var(--muted); font-size: 11px; }
+    .quiz-footer { padding: 17px clamp(22px, 5vw, 45px); display: flex; justify-content: space-between; align-items: center; gap: 14px; border-top: 1px solid var(--line); background: #fbfcfa; }
+    .score { color: var(--muted); font-size: 13px; font-weight: 650; }
+    .score strong { color: var(--teal); font-size: 16px; }
+    .summary { padding: clamp(28px, 6vw, 52px); text-align: center; }
+    .result-badge { display: grid; place-items: center; width: 83px; height: 83px; margin: 0 auto 18px; border-radius: 50%; background: var(--teal-light); color: var(--teal); font-size: 26px; font-weight: 850; }
+    .summary h2 { margin-top: 0; }
+    .result-line { margin: 17px auto 28px; color: var(--muted); font-size: 16px; }
+    .result-line strong { color: var(--teal); font-size: 22px; }
+    .mistakes { margin: 0; padding: 0; list-style: none; text-align: left; border-top: 1px solid var(--line); }
+    .mistakes li { padding: 15px 0; border-bottom: 1px solid var(--line); }
+    .mistakes small { display: block; margin-bottom: 4px; color: var(--bad); font-weight: 750; }
+    .mistakes p { margin: 0; white-space: pre-line; font-family: Georgia, "Times New Roman", serif; line-height: 1.35; }
+    .mistakes .solution { margin-top: 7px; color: var(--good); font-family: inherit; font-size: 13px; font-weight: 700; }
+    .review-card { margin-top: 16px; padding: 20px 24px; display: flex; justify-content: space-between; align-items: center; gap: 20px; }
+    .review-card h3 { margin: 0 0 4px; font-size: 16px; }
+    .review-card p { margin: 0; color: var(--muted); font-size: 13px; }
+    @media (max-width: 560px) {
+      .shell { width: min(100% - 22px, 920px); padding-top: 17px; }
+      header { margin-bottom: 17px; }
+      .saved { display: none; }
+      .session-options { grid-template-columns: repeat(2, 1fr); }
+      .info-grid { grid-template-columns: 1fr; }
+      .info-grid div + div { border-left: 0; border-top: 1px solid var(--line); }
+      .quiz-footer { align-items: flex-end; }
+      .review-card { align-items: flex-start; flex-direction: column; }
+      .answer-text { font-size: 16px; }
+    }
+  </style>
+</head>
+<body>
+  <main class="shell">
+    <header>
+      <div class="brand">
+        <div class="mark">Б1</div>
+        <div>
+          <h1>Ruso B1 · Gramática</h1>
+          <p>Preparación a tu ritmo</p>
+        </div>
+      </div>
+      <div class="saved">✓ Tus fallos se guardan aquí</div>
+    </header>
+
+    <section id="home" class="card">
+      <div class="intro">
+        <div class="eyebrow">Banco de gramática</div>
+        <h2>Una sesión breve,<br>un paso adelante.</h2>
+        <p class="lead">Elige cuántas preguntas quieres practicar. El orden de las preguntas y las respuestas cambia en cada sesión.</p>
+        <div class="session-options" role="radiogroup" aria-label="Número de preguntas">
+          <div class="session-option"><input id="s10" type="radio" name="size" value="10" checked><label for="s10">10<span class="option-caption">rápida</span></label></div>
+          <div class="session-option"><input id="s20" type="radio" name="size" value="20"><label for="s20">20<span class="option-caption">normal</span></label></div>
+          <div class="session-option"><input id="s50" type="radio" name="size" value="50"><label for="s50">50<span class="option-caption">intensiva</span></label></div>
+          <div class="session-option"><input id="sall" type="radio" name="size" value="all"><label for="sall">Todas<span class="option-caption">completa</span></label></div>
+        </div>
+        <div class="action-row">
+          <button id="start" class="primary">Empezar práctica →</button>
+          <button id="review" class="secondary hidden">Repasar fallos guardados</button>
+          <button id="viewMistakes" class="secondary hidden">👁 Ver fallos</button>
+          <button id="viewSaved" class="secondary hidden">📌 Ver guardadas</button>
+          <button id="hardMode" class="secondary">🔥 Preguntas difíciles</button>
+          <button id="viewHard" class="secondary">📊 Ver ranking difícil</button>
+          <button id="resetStats" class="secondary"> 🗑 Reiniciar estadísticas</button>
+          <button id="factoryReset" class="secondary">💣 Reinicio total</button>
+          <button id="loadCsv" class="secondary">📂 Cargar CSV</button>
+          <button id="restoreDefault" class="secondary">🇷🇺 Restaurar examen B1</button>
+
+          <input
+            type="file"
+            id="csvFile"
+            accept=".csv"
+            style="display:none"
+          />
+        </div>
+      </div>
+      <div class="info-grid">
+        <div><strong id="totalCount">—</strong><span>preguntas disponibles</span></div>
+        <div><strong>1</strong><span>respuesta por pregunta</span></div>
+        <div><strong>∞</strong><span>intentos posibles</span></div>
+      </div>
+    </section>
+
+    <section id="quiz" class="card hidden" aria-live="polite">
+      <div class="quiz-head">
+        <div class="quiz-meta"><span id="progressText">Pregunta 1 de 10</span><strong id="percentText">0%</strong></div>
+        <div class="progress"><div id="progressBar"></div></div>
+      </div>
+      <div class="question-area">
+        <div id="questionNumber" class="question-number">Pregunta</div>
+        <div id="questionText" class="question"></div>
+        <div id="answers" class="answers"></div>
+        <div class="question-tools">
+          <button id="bookmark" class="tool-button" type="button">☆ Guardar para repasar</button>
+          <button id="toggleNote" class="tool-button" type="button">✎ Añadir anotación</button>
+        </div>
+        <div id="notePanel" class="note-panel hidden">
+          <label for="noteText">Tu anotación</label>
+          <textarea id="noteText" placeholder="Ej.: revisar este uso del instrumental…"></textarea>
+          <p class="note-help">Se guarda automáticamente y esta pregunta queda en tu lista de guardadas.</p>
+        </div>
+        <div id="feedback" class="feedback hidden"></div>
+      </div>
+      <div class="quiz-footer">
+        <div class="score">Aciertos: <strong id="score">0</strong></div>
+        <button id="next" class="primary hidden">Siguiente →</button>
+        <button id="finish" class="text-button">Terminar sesión</button>
+      </div>
+    </section>
+
+    <section id="results" class="card hidden">
+      <div class="summary">
+        <div id="resultBadge" class="result-badge">—</div>
+        <div class="eyebrow">Sesión terminada</div>
+        <h2 id="resultTitle">Buen trabajo</h2>
+        <p class="result-line">Has acertado <strong id="resultScore">0/0</strong> preguntas.</p>
+        <div id="mistakeSection" class="hidden">
+          <h3>Para repasar</h3>
+          <ul id="mistakeList" class="mistakes"></ul>
+        </div>
+        <div class="action-row" style="justify-content:center">
+          <button id="again" class="primary">Nueva sesión</button>
+          <button id="reviewNow" class="secondary hidden">Practicar estos fallos</button>
+        </div>
+      </div>
+    </section>
+
+    <section id="storedReview" class="card review-card hidden">
+      <div><h3>Errores pendientes</h3><p id="storedReviewText"></p></div>
+      <button id="clearStored" class="text-button">Borrar lista</button>
+    </section>
+    <section id="savedQuestions" class="card review-card hidden">
+      <div><h3>Preguntas guardadas</h3><p id="savedQuestionsText"></p></div>
+      <div class="action-row" style="margin-top:0">
+        <button id="reviewSaved" class="secondary">Repasar guardadas</button>
+        <button id="clearSaved" class="text-button">Borrar guardadas y notas</button>
+      </div>
+    </section>
+  </main>
+
+  <script src="preguntas.js"></script>
+  <div id="questionViewer" class="card hidden" style="margin-top:16px">
+    <div class="intro">
+      <h3 id="viewerTitle">Preguntas</h3>
+      <div id="viewerContent"></div>
+      <div class="action-row">
+        <button id="closeViewer" class="primary">Cerrar</button>
+      </div>
+    </div>
+  </div>
+  <script>
+    (() => {
+      const LETTERS = ["А", "Б", "В", "Г"];
+      const $ = id => document.getElementById(id);
+      const home = $("home"), quiz = $("quiz"), results = $("results");
+      let allQuestions = [], session = [], index = 0, correct = 0, answered = false, mistakes = [];
+
+      function shuffle(items) {
+        const copy = [...items];
+        for (let i = copy.length - 1; i > 0; i--) {
+          const j = Math.floor(Math.random() * (i + 1));
+          [copy[i], copy[j]] = [copy[j], copy[i]];
+        }
+        return copy;
+      }
+
+      function cleanText(text) {
+        return text.replace(/\r/g, "").replace(/[ \t]+\n/g, "\n").replace(/\n{3,}/g, "\n\n").trim();
+      }
+
+      function parseData(csv) {
+        // El CSV tiene unas pocas filas con '":' en lugar de '",:'; ambos formatos se aceptan.
+        const rows = [...csv.matchAll(/^"([\s\S]*?)"\s*,?:\s*([^\r\n]+)\s*$/gm)];
+        const parsed = rows.map((row, id) => {
+          const raw = cleanText(row[1]);
+          const lines = raw.split("\n");
+          const stem = [], options = [];
+          let currentOption = null;
+          lines.forEach(line => {
+            const option = line.trim().match(/^\(([A-Za-zА-Яа-я])\)\s*(.*)$/);
+            if (option) {
+              const label = option[1].toUpperCase();
+              const normalizedLabel = label === "A" ? "А" : label === "B" ? "В" : label;
+              currentOption = { text: option[2].trim(), label: normalizedLabel };
+              options.push(currentOption);
+            } else if (currentOption !== null && line.trim()) {
+              options[options.length - 1].text += " " + line.trim();
+            } else {
+              stem.push(line);
+            }
+          });
+          const answer = row[2].trim().toUpperCase();
+          const correctIndex = options.findIndex(option => option.label === answer);
+          return {
+            id, raw, stem: cleanText(stem.join("\n")),
+            options: options.map(option => option.text), correctIndex, answer
+          };
+        });
+        const usable = parsed.filter(item => item.options.length >= 2 && item.correctIndex >= 0 && item.correctIndex < item.options.length);
+
+        // Dos filas del archivo original perdieron parte de sus opciones al exportarse.
+        // Se reconstruyen usando el mismo bloque de respuestas de las preguntas contiguas.
+        const question132 = parsed.find(item => /^132\./.test(item.stem));
+        if (question132) {
+          question132.options = ["которым", "с которыми", ...question132.options];
+          question132.correctIndex = 0;
+          usable.push(question132);
+        }
+        const question50 = usable.find(item => /^50\./.test(item.stem));
+        if (question50) {
+          usable.push({
+            id: "recovered-49",
+            raw: "49. На соревнованиях победил ... .",
+            stem: "49. На соревнованиях победил ... .",
+            options: [...question50.options],
+            correctIndex: 0,
+            answer: "А"
+          });
+        }
+        return usable;
+      }
+
+      function getStoredMistakes() {
+        try { return JSON.parse(localStorage.getItem("ruso-b1-fallos") || "[]"); } catch { return []; }
+      }
+      function getDifficultyScores() {
+      try {return JSON.parse(localStorage.getItem("ruso-b1-dificultad") || "{}");} catch {return {};}
+      }
+      function saveDifficultyScores(scores) {localStorage.setItem("ruso-b1-dificultad",JSON.stringify(scores));
+      }
+      function registerResult(questionId, correct) {const scores = getDifficultyScores();
+        const current = scores[questionId] || 0;
+        scores[questionId] = correct? Math.max(0, current - 1): current + 2;
+        saveDifficultyScores(scores);
+      }
+      function storeMistakes() {
+        const ids = [...new Set([...getStoredMistakes(), ...mistakes.map(q => q.id)])];
+        localStorage.setItem("ruso-b1-fallos", JSON.stringify(ids));
+      }
+      function questionKey(question) {
+        return String(question.id);
+      }
+      function getSavedQuestionIds() {
+        try { return JSON.parse(localStorage.getItem("ruso-b1-guardadas") || "[]"); } catch { return []; }
+      }
+      function saveQuestionIds(ids) {
+        localStorage.setItem("ruso-b1-guardadas", JSON.stringify([...new Set(ids.map(String))]));
+      }
+      function getNotes() {
+        try { return JSON.parse(localStorage.getItem("ruso-b1-notas") || "{}"); } catch { return {}; }
+      }
+      function saveNotes(notes) {
+        localStorage.setItem("ruso-b1-notas", JSON.stringify(notes));
+      }
+      function updateBookmarkButton() {
+        const item = session[index];
+        if (!item) return;
+        const isSaved = getSavedQuestionIds().includes(questionKey(item));
+        const button = $("bookmark");
+        button.textContent = isSaved ? "★ Guardada para repasar" : "☆ Guardar para repasar";
+        button.classList.toggle("saved-question", isSaved);
+      }
+      function showNoteForCurrentQuestion(show) {
+        const item = session[index];
+        if (!item) return;
+        const notes = getNotes();
+        $("noteText").value = notes[questionKey(item)] || "";
+        $("notePanel").classList.toggle("hidden", !show);
+      }
+      function updateSavedQuestions() {
+        const savedIds = new Set(getSavedQuestionIds());
+        const saved = allQuestions.filter(question => savedIds.has(questionKey(question)));
+        const card = $("savedQuestions");
+        if (saved.length) {
+          $("viewSaved").classList.remove("hidden");
+          card.classList.remove("hidden");
+          $("savedQuestionsText").textContent = saved.length + " " + (saved.length === 1 ? "pregunta guardada" : "preguntas guardadas") + " con o sin anotaciones.";
+        } else {
+          $("viewSaved").classList.add("hidden");
+          card.classList.add("hidden");
+        }
+      }
+      function updateStoredReview() {
+        const ids = getStoredMistakes();
+        const stored = $("storedReview");
+        const review = $("review");
+        $("viewMistakes").classList.remove("hidden");
+        if (ids.length) {
+          review.classList.remove("hidden");
+          stored.classList.remove("hidden");
+          $("storedReviewText").textContent = ids.length + " " + (ids.length === 1 ? "pregunta guardada" : "preguntas guardadas") + " para repasar.";
+        } else {
+          review.classList.add("hidden");
+          $("viewMistakes").classList.add("hidden");
+          stored.classList.add("hidden");
+        }
+      }
+
+      function showQuestionList(title, questions, showNotes = false) {
+        $("viewerTitle").textContent = title;
+
+        const container = $("viewerContent");
+        container.replaceChildren();
+
+        const notes = getNotes();
+
+        questions.forEach(question => {
+          const block = document.createElement("div");
+
+          block.style.padding = "12px";
+          block.style.marginBottom = "12px";
+          block.style.border = "1px solid #dbe1dc";
+          block.style.borderRadius = "10px";
+
+          const questionText = document.createElement("div");
+          questionText.style.fontWeight = "700";
+          questionText.style.marginBottom = "8px";
+          questionText.textContent = question.stem;
+
+          const solution = document.createElement("div");
+          solution.style.color = "#176640";
+          solution.style.marginBottom = "6px";
+          solution.textContent =
+            "✓ Respuesta correcta: " +
+            question.options[question.correctIndex];
+
+          block.append(questionText, solution);
+
+          const scores = getDifficultyScores();
+          const score = scores[question.id];
+
+          if (score !== undefined) {
+            const difficultyDiv = document.createElement("div");
+            difficultyDiv.style.color = "#b45309";
+            difficultyDiv.style.fontWeight = "700";
+            difficultyDiv.style.marginBottom = "6px";
+            difficultyDiv.textContent =
+              "🔥 Dificultad: " + score;
+
+            block.append(difficultyDiv);
+          }
+          if (showNotes) {
+            const note = notes[questionKey(question)];
+
+            if (note) {
+              const noteDiv = document.createElement("div");
+              noteDiv.style.color = "#66777a";
+              noteDiv.style.fontStyle = "italic";
+              noteDiv.textContent = "📝 " + note;
+
+              block.append(noteDiv);
+            }
+          }
+
+          container.append(block);
+        });
+
+        $("questionViewer").classList.remove("hidden");
+      }
+
+      function hideQuestionViewer() {
+        $("questionViewer").classList.add("hidden");
+      }
+
+      function getHardQuestions(limit = 20) {
+        const scores = getDifficultyScores();
+
+        const ranked = Object.entries(scores)
+          .sort((a, b) => b[1] - a[1])
+          .slice(0, limit)
+          .map(([id]) => Number(id));
+
+        return allQuestions.filter(
+          question => ranked.includes(question.id)
+        );
+      }
+
+      function selectedSize() {
+        const value = document.querySelector("input[name=size]:checked").value;
+        return value === "all" ? allQuestions.length : Number(value);
+      }
+
+      function startPractice(questionSet) {
+        const source = questionSet || allQuestions;
+        const count = questionSet ? source.length : Math.min(selectedSize(), source.length);
+        session = shuffle(source).slice(0, count);
+        index = 0; correct = 0; mistakes = []; answered = false;
+        home.classList.add("hidden"); results.classList.add("hidden");
+        $("storedReview").classList.add("hidden"); $("savedQuestions").classList.add("hidden");
+        quiz.classList.remove("hidden");
+        showQuestion();
+      }
+
+      function showQuestion() {
+        const item = session[index];
+        answered = false;
+        const shownOptions = shuffle(item.options.map((text, originalIndex) => ({ text, originalIndex })));
+        item.shownOptions = shownOptions;
+        $("questionNumber").textContent = "Pregunta " + (index + 1);
+        $("questionText").textContent = item.stem;
+        $("progressText").textContent = "Pregunta " + (index + 1) + " de " + session.length;
+        const percent = Math.round((index / session.length) * 100);
+        $("percentText").textContent = percent + "%";
+        $("progressBar").style.width = percent + "%";
+        $("score").textContent = correct;
+        $("feedback").className = "feedback hidden";
+        $("next").classList.add("hidden");
+        updateBookmarkButton();
+        showNoteForCurrentQuestion(Boolean(getNotes()[questionKey(item)]));
+        const container = $("answers");
+        container.replaceChildren();
+        shownOptions.forEach((option, i) => {
+          const button = document.createElement("button");
+          button.className = "answer";
+          button.type = "button";
+          button.dataset.originalIndex = option.originalIndex;
+          button.innerHTML = '<span class="answer-label">' + LETTERS[i] + '</span><span class="answer-text"></span>';
+          button.querySelector(".answer-text").textContent = option.text;
+          button.addEventListener("click", () => answer(option.originalIndex, button));
+          container.append(button);
+        });
+      }
+
+      function answer(chosenIndex, selectedButton) {
+        if (answered) return;
+        answered = true;
+        const item = session[index];
+        const isCorrect = chosenIndex === item.correctIndex;
+        const buttons = [...$("answers").children];
+        buttons.forEach(button => {
+          button.disabled = true;
+          if (Number(button.dataset.originalIndex) === item.correctIndex) button.classList.add("correct");
+        });
+        if (isCorrect) {
+          correct++;
+          registerResult(item.id, true);
+          $("feedback").textContent = "¡Correcto! Muy bien.";
+          $("feedback").className ="feedback good";
+        } 
+        else {
+          registerResult(item.id, false);
+          selectedButton.classList.add("wrong");
+          mistakes.push(item);
+          $("feedback").textContent = "No pasa nada: la respuesta correcta está marcada en verde.";
+          $("feedback").className = "feedback bad";
+        }
+        $("next").classList.remove("hidden");
+        $("score").textContent = correct;
+      }
+
+      function nextQuestion() {
+        if (!answered) return;
+        if (index < session.length - 1) { index++; showQuestion(); }
+        else finishSession();
+      }
+
+      function finishSession() {
+        if (mistakes.length) storeMistakes();
+        quiz.classList.add("hidden");
+        results.classList.remove("hidden");
+        const percentage = session.length ? Math.round((correct / session.length) * 100) : 0;
+        $("resultBadge").textContent = percentage + "%";
+        $("resultScore").textContent = correct + "/" + session.length;
+        $("resultTitle").textContent = percentage >= 85 ? "¡Excelente trabajo!" : percentage >= 60 ? "Vas por muy buen camino" : "Cada intento cuenta";
+        const section = $("mistakeSection"), list = $("mistakeList");
+        list.replaceChildren();
+        if (mistakes.length) {
+          section.classList.remove("hidden");
+          mistakes.forEach(item => {
+            const li = document.createElement("li");
+            const wrong = document.createElement("small");
+            wrong.textContent = "Conviene repasarla";
+            const prompt = document.createElement("p");
+            prompt.textContent = item.stem;
+            const solution = document.createElement("div");
+            solution.className = "solution";
+            solution.textContent = "Respuesta: " + item.options[item.correctIndex];
+            li.append(wrong, prompt, solution);
+            list.append(li);
+          });
+          $("reviewNow").classList.remove("hidden");
+        } else {
+          section.classList.add("hidden");
+          $("reviewNow").classList.add("hidden");
+        }
+        updateStoredReview();
+        updateSavedQuestions();
+      }
+
+      function toggleBookmark() {
+        const item = session[index];
+        if (!item) return;
+        const key = questionKey(item);
+        const saved = getSavedQuestionIds();
+        if (saved.includes(key)) {
+          saveQuestionIds(saved.filter(id => id !== key));
+        } else {
+          saveQuestionIds([...saved, key]);
+        }
+        updateBookmarkButton();
+        updateSavedQuestions();
+      }
+
+      function saveCurrentNote() {
+        const item = session[index];
+        if (!item) return;
+        const key = questionKey(item);
+        const text = $("noteText").value;
+        const notes = getNotes();
+        if (text.trim()) {
+          notes[key] = text;
+          const saved = getSavedQuestionIds();
+          if (!saved.includes(key)) saveQuestionIds([...saved, key]);
+        } else {
+          delete notes[key];
+        }
+        saveNotes(notes);
+        updateBookmarkButton();
+        updateSavedQuestions();
+      }
+
+      function loadQuestionsFromCsv(csvText) {
+
+        allQuestions = parseData(csvText);
+
+        $("totalCount").textContent =
+          allQuestions.length;
+
+        updateStoredReview();
+        updateSavedQuestions();
+
+        if (!allQuestions.length) {
+          $("start").disabled = true;
+          $("start").textContent =
+            "No se han cargado preguntas";
+        } else {
+          $("start").disabled = false;
+          $("start").textContent =
+            "Empezar práctica →";
+        }
+      }
+
+      $("start").addEventListener("click", () => startPractice());
+      $("next").addEventListener("click", nextQuestion);
+      $("finish").addEventListener("click", finishSession);
+      $("bookmark").addEventListener("click", toggleBookmark);
+      $("toggleNote").addEventListener("click", () => {
+        const willShow = $("notePanel").classList.contains("hidden");
+        showNoteForCurrentQuestion(willShow);
+        if (willShow) $("noteText").focus();
+      });
+      $("noteText").addEventListener("input", saveCurrentNote);
+      $("again").addEventListener("click", () => {
+        results.classList.add("hidden"); home.classList.remove("hidden"); updateStoredReview(); updateSavedQuestions();
+      });
+      $("reviewNow").addEventListener("click", () => startPractice(mistakes));
+      $("review").addEventListener("click", () => {
+        const ids = new Set(getStoredMistakes());
+        startPractice(allQuestions.filter(question => ids.has(question.id)));
+      });
+      $("clearStored").addEventListener("click", () => {
+        localStorage.removeItem("ruso-b1-fallos");
+        updateStoredReview();
+      });
+      $("reviewSaved").addEventListener("click", () => {
+        const ids = new Set(getSavedQuestionIds());
+        startPractice(allQuestions.filter(question => ids.has(questionKey(question))));
+      });
+      $("clearSaved").addEventListener("click", () => {
+        const ids = new Set(getSavedQuestionIds());
+        const notes = getNotes();
+        ids.forEach(id => delete notes[id]);
+        localStorage.removeItem("ruso-b1-guardadas");
+        saveNotes(notes);
+        updateSavedQuestions();
+      });
+      $("viewMistakes").addEventListener("click", () => {
+        const ids = new Set(getStoredMistakes());
+
+        const questions = allQuestions.filter(
+          question => ids.has(question.id)
+        );
+
+        showQuestionList(
+          "❌ Preguntas falladas",
+          questions
+        );
+      });
+
+      $("viewSaved").addEventListener("click", () => {
+        const ids = new Set(getSavedQuestionIds());
+
+        const questions = allQuestions.filter(
+          question => ids.has(questionKey(question))
+        );
+
+        showQuestionList(
+          "📌 Preguntas guardadas",
+          questions,
+          true
+        );
+      });
+
+      $("closeViewer").addEventListener(
+        "click",
+        hideQuestionViewer
+      );
+      $("hardMode").addEventListener("click", () => {
+        const questions = getHardQuestions(20);
+
+        if (!questions.length) {
+          alert(
+            "Todavía no hay suficientes estadísticas. Haz algunas preguntas primero."
+          );
+          return;
+        }
+
+        startPractice(questions);
+      });
+      document.addEventListener("keydown", event => {
+        if (event.key === "Enter" && answered && !quiz.classList.contains("hidden")) nextQuestion();
+      });
+
+      $("viewHard").addEventListener("click", () => {
+
+        const scores = getDifficultyScores();
+
+        const rankedIds = Object.entries(scores)
+          .sort((a, b) => b[1] - a[1]);
+
+        const questions = rankedIds
+          .map(([id]) =>
+            allQuestions.find(q => q.id === Number(id))
+          )
+          .filter(Boolean);
+
+        showQuestionList(
+          "🔥 Ranking de preguntas difíciles",
+          questions
+        );
+      });
+
+      $("resetStats").addEventListener("click", () => {
+
+        const confirmed = confirm(
+          "¿Seguro que quieres borrar todas las estadísticas de dificultad?"
+        );
+
+        if (!confirmed) return;
+
+        localStorage.removeItem(
+          "ruso-b1-dificultad"
+        );
+
+        alert(
+          "Estadísticas reiniciadas."
+        );
+      });
+
+      $("factoryReset").addEventListener("click", () => {
+
+        const confirmed = confirm(
+          "Esto borrará fallos, guardadas, notas y estadísticas. ¿Continuar?"
+        );
+
+        if (!confirmed) return;
+
+        localStorage.removeItem("ruso-b1-dificultad");
+        localStorage.removeItem("ruso-b1-fallos");
+        localStorage.removeItem("ruso-b1-guardadas");
+        localStorage.removeItem("ruso-b1-notas");
+
+        updateStoredReview();
+        updateSavedQuestions();
+
+        alert("Aplicación reiniciada.");
+      });
+
+      $("loadCsv").addEventListener("click", () => {
+        $("csvFile").click();
+      });
+
+      $("csvFile").addEventListener("change", event => {
+
+        const file = event.target.files[0];
+
+        if (!file) return;
+
+        const reader = new FileReader();
+
+        reader.onload = e => {
+
+          const csvText = e.target.result;
+
+          localStorage.setItem(
+            "active-csv",
+            csvText
+          );
+
+          loadQuestionsFromCsv(csvText);
+
+          alert(
+            `${allQuestions.length} preguntas cargadas`
+          );
+        };
+
+        reader.readAsText(file);
+      });
+
+      $("restoreDefault").addEventListener(
+        "click",
+        () => {
+
+          localStorage.removeItem(
+            "active-csv"
+          );
+
+          loadQuestionsFromCsv(
+            window.B1_EXAM_CSV || ""
+          );
+
+          alert(
+            "Examen B1 restaurado"
+          );
+        }
+      );
+
+      const storedCsv =
+        localStorage.getItem("active-csv");
+
+      if (storedCsv) {
+        loadQuestionsFromCsv(storedCsv);
+      } else {
+        loadQuestionsFromCsv(
+          window.B1_EXAM_CSV || ""
+        );
+      }
+      window.debugDifficulty = () => {
+        console.table(getDifficultyScores());
+      };
+      updateStoredReview();
+      updateSavedQuestions();
+      if (!allQuestions.length) {
+        $("start").disabled = true;
+        $("start").textContent = "No se han cargado preguntas";
+      }
+
+      if ("serviceWorker" in navigator) {
+        navigator.serviceWorker
+          .register("./sw.js")
+          .then(() => console.log("PWA activa"))
+          .catch(console.error);
+      }
+    })();
+  </script>
+</body>
+</html>
