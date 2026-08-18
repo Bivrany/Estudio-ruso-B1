@@ -322,6 +322,8 @@
             console.log("Chunks:", audioChunks.length);
             console.log("Blob:", audioBlob);
             console.log("URL:", currentAudio);
+            console.log("Blob size:", audioBlob.size);
+            console.log("Blob type:", audioBlob.type);
           };
           console.log("Inicio grabación");
           mediaRecorder.start();
@@ -367,18 +369,50 @@
         }
       }
 
+      let playbackAudio = null;
+
       function playRecording() {
-        if (!currentAudio) {
+
+        console.log("Intentando reproducir");
+
+        if (!audioBlob) {
+
+          console.log("No hay audioBlob");
+
           alert("Todavía no hay ninguna grabación.");
+
           return;
         }
-        const audio =
-          new Audio(currentAudio);
-        audio.play();
-        console.log("Intentando reproducir");
-        console.log(currentAudio);
-      }
 
+        if (playbackAudio) {
+          playbackAudio.pause();
+          playbackAudio = null;
+        }
+
+        playbackAudio = new Audio(
+          URL.createObjectURL(audioBlob)
+        );
+
+        playbackAudio.onplay = () => {
+          console.log("PLAY");
+        };
+
+        playbackAudio.onended = () => {
+          console.log("END");
+        };
+
+        playbackAudio.onerror = error => {
+          console.error("ERROR AUDIO", error);
+        };
+
+        playbackAudio.play()
+          .then(() => {
+            console.log("PROMISE OK");
+          })
+          .catch(error => {
+            console.error(error);
+          });
+      }
       function shuffle(items) {
         const copy = [...items];
         for (let i = copy.length - 1; i > 0; i--) {
